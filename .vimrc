@@ -32,10 +32,10 @@ syntax enable
 set background=dark
 
 " Tab系
-" 行頭以外のTab文字の表示幅（スペースいくつ分）
-set tabstop=4
-" 行頭でのTab文字の表示幅
-set shiftwidth=4
+"" 行頭以外のTab文字の表示幅（スペースいくつ分）
+"set tabstop=4
+"" 行頭でのTab文字の表示幅
+"set shiftwidth=4
 
 
 " 検索系
