@@ -54,3 +54,7 @@ nmap <Esc><Esc> :nohlsearch<CR><Esc>
 
 "tmuxマウススクロール問題 
 set mouse=a
+
+"vimで日本語を入力してescした際に自動的に日本語入力モードから抜ける
+inoremap <silent> <Esc> <Esc>:call system('fcitx-remote -c')<CR>
+
