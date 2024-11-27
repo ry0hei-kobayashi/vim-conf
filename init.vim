@@ -1,8 +1,6 @@
 "if you install neovim, this file set to .config/nvim/ 
 "if you want to change the rosed defaults. set those to bashrc [alias vim='nvim' export EDITOR='nvim']
 
-"
-" setting
 "文字コードをUFT-8に設定
 set fenc=utf-8
 " バックアップファイルを作らない
@@ -87,17 +85,18 @@ Plug 'preservim/nerdtree' "file tree
 Plug 'lewis6991/gitsigns.nvim' 
 Plug 'windwp/nvim-autopairs' "auto bracket
 Plug 'EdenEast/nightfox.nvim' "colorscheme 
-Plug 'mhinz/vim-startify' "startup
+Plug 'mhinz/vim-startify' "startup screen
 
 " depend of ddc
 Plug 'vim-denops/denops.vim'
 
-"dd series for completion and suggestion
+"dd series for completion
 Plug 'Shougo/ddc.vim'
 Plug 'Shougo/ddc-source-around'
 Plug 'Shougo/ddc-filter-matcher_head'
 Plug 'Shougo/ddc-filter-sorter_rank'
 Plug 'Shougo/ddc-ui-native'
+Plug 'Shougo/ddc-source-lsp'
 
 call plug#end()
 
@@ -123,27 +122,29 @@ EOF
 
 "----------------ddc----------------------
 " ddcの設定
-" ui で何を使用するか指定
 call ddc#custom#patch_global('ui', 'native')
 
 " 補完内容を管理
 call ddc#custom#patch_global('sources', ['around'])
 
-" 保管時のオプションを管理
 call ddc#custom#patch_global('sourceOptions', {
-      \ '_': {
-      \   'matchers': ['matcher_head'],
-      \   'sorters': ['sorter_rank']},
-      \ })
+    \ '_': {
+    \   'matchers': ['matcher_head'],
+    \   'sorters': ['sorter_rank'],
+    \ },
+    \ 'around': {'mark': 'Around'},
+    "\ 'lsp': {'mark': 'LSP', 'forceCompletionPattern': '\.\w*|:\w*|->\w*'}
+\ })
 
-" <TAB>: completion.
-inoremap <expr> <TAB>
-    \ pumvisible() ? '<C-n>' :
-    \ (col('.') <= 1 <Bar><Bar> getline('.')[col('.') - 2] =~# '\s') ?
-    \ '<TAB>' : ddc#map#manual_complete()
-
-" <S-TAB>: completion back.
-inoremap <expr> <S-TAB>  pumvisible() ? '<C-p>' : '<C-h>'
+" Tab for completion
+inoremap <expr> <TAB> pumvisible() ? '<C-n>' : ddc#map#manual_complete()
+" Shift-Tab for completion back
+inoremap <expr> <S-TAB> pumvisible() ? '<C-p>' : '<C-h>'
 
 call ddc#enable()
 "----------------ddc----------------------
+"
+
+" ハイライト色変更
+highlight Visual ctermbg=yellow guibg=yellow
+

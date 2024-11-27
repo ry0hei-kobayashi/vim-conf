@@ -19,3 +19,11 @@ curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --c
 
 # deno
 curl -fsSL https://deno.land/install.sh | sh
+
+# install npm
+#curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+#sudo apt install nodejs npm
+#sudo npm install -g vim-language-server
+#sudo npm install -g pyright
+#
+
