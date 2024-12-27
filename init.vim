@@ -18,7 +18,8 @@ set showcmd
 let mapleader = "\<Space>"
 
 " yankした文字をclipboardへ
-set clipboard=unnamed 
+"set clipboard=unnamed 
+set clipboard=unnamedplus
 
 " 見た目系
 " 行番号を表示
@@ -82,10 +83,13 @@ set mouse=a
 call plug#begin('~/.local/share/nvim/plugged')
 
 Plug 'preservim/nerdtree' "file tree
+Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}
 Plug 'lewis6991/gitsigns.nvim' 
 Plug 'windwp/nvim-autopairs' "auto bracket
 Plug 'EdenEast/nightfox.nvim' "colorscheme 
 Plug 'mhinz/vim-startify' "startup screen
+Plug 'lukas-reineke/indent-blankline.nvim' "indantation viewer
+Plug 'HiPhish/rainbow-delimiters.nvim' "indantation viewer
 
 " depend of ddc
 Plug 'vim-denops/denops.vim'
@@ -96,7 +100,7 @@ Plug 'Shougo/ddc-source-around'
 Plug 'Shougo/ddc-filter-matcher_head'
 Plug 'Shougo/ddc-filter-sorter_rank'
 Plug 'Shougo/ddc-ui-native'
-Plug 'Shougo/ddc-source-lsp'
+"Plug 'Shougo/ddc-source-lsp'
 
 call plug#end()
 
@@ -106,8 +110,27 @@ let g:denops#deno = expand('$HOME/.deno/bin/deno')
 
 
 "----------------nerdtree----------------------
-nnoremap <C-t> :NERDTreeToggle<CR>
+nnoremap <C-n> :NERDTreeToggle<CR>
 "----------------nerdtree----------------------
+"
+"----------------toggle term----------------------
+lua << EOF
+require("toggleterm").setup({
+    open_mapping = [[<c-t>]],
+    hide_numbers = true, 
+    shade_filetypes = {},
+    shade_terminals = true,
+    shading_factor = "1",
+    start_in_insert = true, 
+    persist_size = true,
+    direction = "horizontal",
+    close_on_exit = true, 
+    shell = vim.o.shell, 
+
+})
+vim.api.nvim_set_keymap('t', '<C-[>', [[<C-\><C-n>]], { noremap = true, silent = true })
+EOF
+"----------------toggle term----------------------
 
 "----------------nightfox----------------------
 colorscheme carbonfox
@@ -143,8 +166,41 @@ inoremap <expr> <S-TAB> pumvisible() ? '<C-p>' : '<C-h>'
 
 call ddc#enable()
 "----------------ddc----------------------
-"
+
+
+"" -----------------------------------------------
+" indent-blankline 設定
+" -----------------------------------------------
+lua << EOF
+local highlight = {
+    "RainbowRed",
+    "RainbowYellow",
+    "RainbowBlue",
+    "RainbowOrange",
+    "RainbowGreen",
+    "RainbowViolet",
+    "RainbowCyan",
+}
+
+local hooks = require "ibl.hooks"
+
+-- create the highlight groups in the highlight setup hook, so they are reset
+-- every time the colorscheme changes
+hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
+    vim.api.nvim_set_hl(0, "RainbowRed", { fg = "#E06C75" })
+    vim.api.nvim_set_hl(0, "RainbowYellow", { fg = "#E5C07B" })
+    vim.api.nvim_set_hl(0, "RainbowBlue", { fg = "#61AFEF" })
+    vim.api.nvim_set_hl(0, "RainbowOrange", { fg = "#D19A66" })
+    vim.api.nvim_set_hl(0, "RainbowGreen", { fg = "#98C379" })
+    vim.api.nvim_set_hl(0, "RainbowViolet", { fg = "#C678DD" })
+    vim.api.nvim_set_hl(0, "RainbowCyan", { fg = "#56B6C2" })
+end)
+require("ibl").setup {}
+EOF
+"require("ibl").setup { scope = { highlight = highlight }, indent = {highlight = highlight} }
+
+
 
 " ハイライト色変更
-highlight Visual ctermbg=yellow guibg=yellow
+highlight Visual ctermbg=yellow guibg=yellow ctermfg=black guifg=black
 
